@@ -599,7 +599,11 @@
                             </div>
                             <div class="top-0 bottom-0 left-0 right-0 flex flex-col flex-1 overflow-hidden bg-transparent bg-bottom bg-cover">
                                 <div class="self-center flex-1 w-full">
-                                    <div class="relative flex flex-col px-3 py-1 m-auto overflow-auto" style="height: 520px">
+                                    <div class="flex flex-col px-3 py-1 m-auto overflow-auto" style="height: 520px" id="scrollArea">
+                                        <div class="absolute z-50 bottom-0 right-0 mb-3 mr-3 p-2 border-gray-100 border-2 rounded-full bg-white transform transition duration-200">
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18"><path class="heroicon-ui" d="M11 18.59V3a1 1 0 0 1 2 0v15.59l5.3-5.3a1 1 0 0 1 1.4 1.42l-7 7a1 1 0 0 1-1.4 0l-7-7a1 1 0 0 1 1.4-1.42l5.3 5.3z"/></svg>
+                                        </div>
                                         <div class="self-end w-3/4 my-2">
                                             <div class="relative p-4 text-sm bg-white rounded-t-lg rounded-r-lg shadow">
 
@@ -667,15 +671,15 @@
                                             <span class="ml-2 text-xs font-medium text-gray-600">19.24</span>
                                         </div>
                                         <div class="self-center px-2 py-1 mx-0 my-1 text-sm text-white text-gray-700 bg-gray-300 border border-gray-300 rounded-full shadow rounded-tg">May 9</div>
-                                        <div class="self-center px-2 py-1 mx-0 my-1 text-sm text-white text-gray-700 bg-white border border-gray-200 rounded-full shadow rounded-tg">Agreement was renewed
+                                       <div class="self-end w-3/4 my-2">
+                                        <div class="relative p-4 text-sm bg-yellow-300 rounded-t-lg rounded-l-lg shadow">
+                                            Still waiting for flow
+                                            <span class="absolute bottom-0 right-0  mr-1 mb-1 text-xs font-medium text-gray-600">11.01</span>
+                                        </div>
+                                    </div> <div class="self-center px-2 py-1 mx-0 my-2 text-sm text-white text-gray-700 bg-white border border-gray-200 rounded-full shadow rounded-tg">Agreement was renewed
                                             <span class="ml-2 text-xs font-medium text-gray-600">22.14</span>
                                         </div>
-                                        <div class="self-end w-3/4 my-2">
-                                            <div class="relative p-4 text-sm bg-yellow-300 rounded-t-lg rounded-l-lg shadow">
-                                                Still waiting for flow
-                                                <span class="absolute bottom-0 right-0  mr-1 mb-1 text-xs font-medium text-gray-600">11.01</span>
-                                            </div>
-                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -720,6 +724,32 @@
                 event.target.closest('[data-dropdown]').querySelector('[data-dropdown-list]').classList.add("block")
                 event.target.closest('[data-dropdown]').querySelector('[data-dropdown-list]').classList.remove("hidden")
             })
+            // Set things up
+            window.addEventListener("load", (event) => {
+                const root = document.querySelector('#scrollArea > *:last-child')
+                console.log('root: ', root)
+                let options = {
+                    root,
+                    rootMargin: '400px',
+                    threshold: 1.0
+                }
+
+                const intersectionCallback = (entries) => {
+                    entries.forEach(entry => {
+                        console.log('entry: ', entry)
+                        if (entry.intersectionRatio == 0) {
+                        document.querySelector('#scrollArea > *:first-child').classList.remove('scale-0')
+                        document.querySelector('#scrollArea > *:first-child').classList.add('scale-100')
+                        } else {
+                            document.querySelector('#scrollArea > *:first-child').classList.remove('scale-100')
+                            document.querySelector('#scrollArea > *:first-child').classList.add('scale-0')
+                        }
+                    });
+                }
+                let observer = new IntersectionObserver(intersectionCallback);
+                observer.observe(root)
+            }, false);
+
         })()
     </script>
 </html>
